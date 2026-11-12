@@ -1,0 +1,20 @@
+/* Styles partagés, servis localement sans dépendance. */
+html { overflow-wrap: anywhere; }
+.skip-link { position: absolute; left: 1rem; top: 1rem; transform: translateY(-200%); z-index: 10; padding: .8rem 1rem; color: #203c33; background: #fffdf5; text-decoration: underline; }
+.skip-link:focus { transform: none; outline: 3px solid #203c33; outline-offset: 3px; }
+.site-footer { display: block; width: min(1120px, calc(100% - 40px)); margin: 2rem auto 0; padding: 1.5rem 0 2rem; border-top: 1px solid #68786e; color: #203c33; background: #f8f5ea; font: 1rem/1.6 system-ui, sans-serif; }
+.site-footer nav { display: block; }
+.site-footer ul { display: flex; flex-wrap: wrap; gap: .5rem 1.5rem; list-style: none; margin: 0; padding: 0; }
+.site-footer a { display: inline-block; padding: .4rem 0; color: inherit; text-decoration: underline; text-underline-offset: .2em; }
+:where(a, button, input, summary, [tabindex]):focus-visible { outline: 3px solid currentColor; outline-offset: 4px; }
+.support-page { margin: 0; color: #203c33; background: #f8f5ea; font: 1rem/1.7 system-ui, sans-serif; }
+.support-page * { box-sizing: border-box; }
+.support-header { width: min(1120px, calc(100% - 40px)); margin: auto; padding: 1.5rem 0; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 1rem; border-bottom: 1px solid #68786e; }
+.support-header nav { display: flex; flex-wrap: wrap; gap: 1.5rem; }
+.support-page a { color: inherit; text-underline-offset: .2em; }
+.support-page .brand { font-weight: 800; }
+.support-main { width: min(72ch, calc(100% - 40px)); margin: auto; padding: 2rem 0; }
+.support-main h1 { font: 400 clamp(2rem, 5vw, 3rem)/1.2 Georgia, serif; }
+.support-main h2 { font-size: 1.4rem; line-height: 1.4; margin-top: 2rem; }
+.support-main li { margin-block: .4rem; }
+@media (forced-colors: active) { :focus-visible { outline: 3px solid Highlight; } }
