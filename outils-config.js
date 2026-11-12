@@ -1,7 +1,6 @@
-// Configuration publique : ne jamais ajouter de secret dans ce fichier.
-// Chargement à intégrer à outils.html avec les formulaires de l’exercice.
+// Configuration publique : aucun secret ni jeton de connexion ici.
 window.OUTILS_CONFIG = Object.freeze({
-  apiBaseUrl: "", // À renseigner après le déploiement du Worker.
-  turnstileSiteKey: "0x4AAAAAAF-c7eodeiOgswtW",
-  turnstileAction: "soumission"
+  apiBaseUrl: '/api',
+  turnstileSiteKey: '0x4AAAAAAF-c7eodeiOgswtW',
+  turnstileAction: 'soumission'
 });
