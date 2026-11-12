@@ -49,7 +49,7 @@ export default {
     try {
       const filename = `${crypto.randomUUID()}.json`;
 
-      const result = await env.MY_BUCKET.put(
+      const result = await env.DATA.put(
         filename,
         JSON.stringify(data, null, 2),
         {
