@@ -41,18 +41,32 @@
     footer { border-top: 1px solid #203c3326; padding: 22px 0 30px; display: flex; justify-content: space-between; gap: 20px; font-size: 12px; color: #52625b; }
     a:focus-visible { outline: 3px solid #b95534; outline-offset: 6px; }
     @media (max-width: 700px) { header, main, footer { width: calc(100% - 40px); } main { padding-top: 36px; } .hero { grid-template-columns: 1fr; gap: 36px; } h1 { font-size: clamp(52px, 12vw, 76px); } .art { min-height: 310px; } .sun { width: 210px; height: 210px; } .quote { margin-top: 40px; grid-template-columns: 1fr; gap: 16px; } footer { flex-wrap: wrap; } }
-    @media (prefers-reduced-motion: reduce) { .button { transition: none; } }
+    @media (prefers-reduced-motion: reduce) { .button { transition: none; } .button:hover { transform: none; } }
   </style>
+  <link rel="stylesheet" href="commun.css">
 </head>
 <body>
+  <a class="skip-link" href="#contenu">Aller au contenu</a>
   <header><a class="brand" href="index.html" aria-label="Codex Prime, accueil">CODEX <span>PRIME</span></a><a class="header-link" href="outils.html">Le coin des outils ↗</a></header>
-  <main>
+  <main id="contenu" tabindex="-1">
     <section class="hero" aria-labelledby="hero-title">
       <div><p class="eyebrow">Un petit coin de bonne humeur</p><h1 id="hero-title">La vie est belle.<br><em>À toi de jouer.</em></h1><p class="intro">Un café, une idée un peu folle, un premier pas. Pas besoin d’avoir tout prévu pour faire de cette journée une jolie aventure.</p><a class="button" href="outils.html">Explorer les outils <span aria-hidden="true">↗</span></a></div>
       <div class="art" role="img" aria-label="Un soleil souriant se lève sur des collines vertes"><span class="art-note" aria-hidden="true">ça va rayonner !</span><span class="spark" aria-hidden="true">✳</span><div class="sun"><i class="eye left"></i><i class="eye right"></i><i class="smile"></i></div><div class="hill"></div><div class="hill front"></div></div>
     </section>
     <section class="quote" aria-label="La pensée du jour"><span class="quote-label">La pensée qui fait du bien</span><div><blockquote>« La vie n’a pas de bouton replay. Alors monte le son, danse un peu faux et profite du morceau. »</blockquote><p class="signature">Une pensée originale, pour les jours avec et les jours bof.</p></div></section>
   </main>
-  <footer><span>Codex Prime · Cultiver la curiosité.</span><span>Un petit pas aujourd’hui, une belle histoire demain.</span></footer>
+  <footer class="site-footer">
+  <nav aria-label="Pied de page">
+    <ul>
+      <li><a href="contact.html">Contact</a></li>
+      <li><a href="aide.html">Aide</a></li>
+      <li><a href="info-site.html">Info site</a></li>
+      <li><a href="accessibilite.html">Accessibilité : non conforme</a></li>
+      <li><a href="index.html">Site de Locazen</a></li>
+      <li><a href="donnees-personnelles.html">Cookies / Données personnelles</a></li>
+      <li><a href="mentions-legales.html">Mentions légales</a></li>
+    </ul>
+  </nav>
+</footer>
 </body>
 </html>

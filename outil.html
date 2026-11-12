@@ -4,11 +4,11 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="avenir — Codex Prime">
-  <title>avenir</title>
+  <title>avenir : outil de bienvenue | Codex-prime</title>
   <style>
     :root { color-scheme: dark; font-family: system-ui, -apple-system, "Segoe UI", sans-serif; }
     * { box-sizing: border-box; }
-    body { margin: 0; min-height: 100vh; background: radial-gradient(circle at top, #25346b, #0b1020 65%); color: #f5f7ff; display: grid; place-items: center; padding: 24px; }
+    body { margin: 0; min-height: 100vh; background: radial-gradient(circle at top, #25346b, #0b1020 65%); color: #f5f7ff; display: grid; justify-items: center; align-content: start; gap: 24px; padding: 24px; }
     main { width: min(100%, 680px); padding: clamp(24px, 5vw, 48px); border: 1px solid #ffffff2a; border-radius: 24px; background: #ffffff0d; box-shadow: 0 18px 60px #0005; }
     .eyebrow { color: #a5b4fc; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; font-size: .8rem; }
     h1 { font-size: clamp(2rem, 6vw, 3.5rem); margin: 8px 0 12px; }
@@ -21,9 +21,12 @@
     button:hover { background: #a5b4fc; }
     #resultat { min-height: 1.5em; margin-bottom: 0; overflow-wrap: anywhere; }
   </style>
+  <link rel="stylesheet" href="commun.css">
 </head>
 <body>
-  <main>
+  <a class="skip-link" href="#contenu">Aller au contenu</a>
+  <header><a href="index.html" style="color: inherit">Codex Prime : accueil</a></header>
+  <main id="contenu" tabindex="-1">
     <div class="eyebrow">Codex Prime</div>
     <h1>avenir</h1>
     <p>Bienvenue sur avenir, votre espace pour imaginer la suite et donner vie à vos idées.</p>
@@ -31,13 +34,27 @@
       <h2 id="outil-titre">Outil de bienvenue</h2>
       <label for="nom">Votre prénom</label>
       <div class="controls">
-        <input id="nom" type="text" maxlength="80" placeholder="Saisissez votre prénom">
+        <input id="nom" name="prenom" autocomplete="given-name" type="text" maxlength="80" placeholder="Saisissez votre prénom">
         <button id="saluer" type="button">Dire bonjour</button>
       </div>
       <p id="resultat" role="status" aria-live="polite"></p>
     </section>
+    <noscript><p>JavaScript est nécessaire pour afficher le message de bienvenue. Les autres pages restent accessibles sans JavaScript.</p></noscript>
   </main>
-  <script>
+<footer class="site-footer">
+  <nav aria-label="Pied de page">
+    <ul>
+      <li><a href="contact.html">Contact</a></li>
+      <li><a href="aide.html">Aide</a></li>
+      <li><a href="info-site.html">Info site</a></li>
+      <li><a href="accessibilite.html">Accessibilité : non conforme</a></li>
+      <li><a href="index.html">Site de Locazen</a></li>
+      <li><a href="donnees-personnelles.html">Cookies / Données personnelles</a></li>
+      <li><a href="mentions-legales.html">Mentions légales</a></li>
+    </ul>
+  </nav>
+</footer>
+  <script type="module">
     const input = document.getElementById('nom');
     const resultat = document.getElementById('resultat');
     function saluer() {
