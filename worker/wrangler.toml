@@ -4,5 +4,5 @@ compatibility_date = "2026-11-12"
 keep_vars = true
 
 [[r2_buckets]]
-binding = "MY_BUCKET"
-bucket_name = "DATA"
+binding = "DATA"
+bucket_name = "formation-s4-donnees-mon-groupe"
