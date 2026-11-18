@@ -5,4 +5,4 @@ keep_vars = true
 
 [[r2_buckets]]
 binding = "MY_BUCKET"
-bucket_name = "archives-json"
+bucket_name = "DATA"
