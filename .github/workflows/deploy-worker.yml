@@ -1,11 +1,31 @@
-name: Déployer le Worker de formation
+name: Tester et déployer le Worker de formation
 on:
   workflow_dispatch:
+  pull_request:
+    paths:
+      - 'worker/**'
+      - '.github/workflows/deploy-worker.yml'
 permissions:
   contents: read
 jobs:
+  checks:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: worker
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: worker/package-lock.json
+      - run: npm ci
+      - run: npm test
+      - run: npm run check
   deploy:
-    if: github.ref == 'refs/heads/main'
+    needs: checks
+    if: github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     environment: formation
     defaults:
