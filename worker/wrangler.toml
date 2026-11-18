@@ -5,9 +5,4 @@ keep_vars = true
 
 [[r2_buckets]]
 binding = "DATA"
-bucket_name = "formation-s4-donnees-codex-prime"
-
-[vars]
-ALLOWED_ORIGIN = "https://codex-prime-crl.pages.dev"
-TURNSTILE_HOSTNAME = "codex-prime-crl.pages.dev"
-TURNSTILE_ACTION = "soumission"
+bucket_name = "formation-s4-donnees-mon-groupe"
