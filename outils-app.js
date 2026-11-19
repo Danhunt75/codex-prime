@@ -70,14 +70,24 @@
   function commentsUI(tool) {
     const details=el('details'); details.append(el('summary','Commentaires / ajouter un commentaire'));
     const list=el('div','Ouvre cette section pour charger les commentaires.'); details.append(list);
-    async function refresh() {
+    const more=el('button','Charger les commentaires précédents',{type:'button'});
+    const pageStatus=el('p','',{role:'status'});more.hidden=true;details.append(more,pageStatus);
+    let nextCursor=null;let loading=false;let requestVersion=0;
+    async function refresh(append=false) {
+      if(append && (loading || !nextCursor))return;
+      const version=++requestVersion;loading=true;more.disabled=true;pageStatus.textContent='Chargement…';
+      const query=append?'?cursor='+encodeURIComponent(nextCursor):'';
       try {
-        const {commentaires}=await api(`/outils/${tool.outilId}/commentaires`);
-        list.replaceChildren();
-        if(!commentaires.length) list.textContent='Aucun commentaire enregistré.';
-        for(const c of commentaires) { const item=el('article'); item.className='comment'; item.append(el('p',c.texte),el('small',new Date(c.date).toLocaleString('fr-FR'))); list.append(item); }
-      } catch(error) { list.textContent=error.message; }
+        const data=await api(`/outils/${tool.outilId}/commentaires`+query);
+        if(version!==requestVersion)return;
+        if(!append)list.replaceChildren();
+        if(!append && !data.commentaires.length)list.textContent='Aucun commentaire enregistré.';
+        for(const c of data.commentaires) { const item=el('article'); item.className='comment'; item.append(el('p',c.texte),el('small',`${c.auteur} · ${new Date(c.date).toLocaleString('fr-FR')}`)); list.append(item); }
+        nextCursor=data.nextCursor;more.hidden=!nextCursor;pageStatus.textContent='Les plus récents en premier.';
+      } catch(error) { if(version===requestVersion)pageStatus.textContent=error.message; }
+      finally {if(version===requestVersion){loading=false;more.disabled=false;}}
     }
+    more.addEventListener('click',()=>refresh(true));
     details.addEventListener('toggle',()=>{if(details.open)refresh();});
     if(connected && tool.version) {
       const form=el('form'); const label=el('label','Ton commentaire'); const input=el('textarea'); input.required=true; input.maxLength=4000; label.append(input);form.append(label);
@@ -85,7 +95,7 @@
       const check=widget(form);const button=el('button','Ajouter',{type:'submit'});const message=el('p','',{role:'status'});form.append(button,message);details.append(form);
       form.addEventListener('submit',async event=>{
         event.preventDefault();button.disabled=true;message.textContent='Enregistrement…';
-        try { if(!check.get())throw Error('Valide la vérification anti-robot.'); await send(`/outils/${tool.outilId}/commentaires`,'POST',{texte:input.value,turnstileToken:check.get()});input.value='';message.textContent='Commentaire enregistré dans R2.';await refresh(); }
+        try { if(!check.get())throw Error('Valide la vérification anti-robot.'); await send(`/outils/${tool.outilId}/commentaires`,'POST',{texte:input.value,turnstileToken:check.get()});input.value='';message.textContent='Commentaire enregistré dans D1.';await refresh(); }
         catch(error){message.textContent=error.message;}finally{button.disabled=false;check.reset();}
       });
     }
