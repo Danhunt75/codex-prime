@@ -5,4 +5,4 @@ keep_vars = true
 
 [[r2_buckets]]
 binding = "DATA"
-bucket_name = "formation-s4-donnees-mon-groupe"
+bucket_name = "formation-s4-donnees-codex-prime"
