@@ -1,9 +1,12 @@
-(() => {
+(async () => {
   'use strict';
   const cfg = window.OUTILS_CONFIG;
-  let tools = JSON.parse(document.getElementById('initial-tools').textContent);
+  const isCloudflarePages = location.hostname === 'codex-prime-crl.pages.dev';
+  const initialTools = (await import('./worker/src/initial-tools.js')).default;
+  let tools = initialTools;
   let connected = false;
   const status = document.getElementById('cloud-status');
+  const connect = document.getElementById('connect-link');
   const reload = document.getElementById('reload-tools');
   const init = document.getElementById('init-tools');
   const search = document.getElementById('tool-search');
@@ -104,21 +107,28 @@
         if(group==='A')tr.append(el('td',f.numero));
         const title=el('th',undefined,{scope:'row'});title.append(el('a',f.nom,{href:f.url}));tr.append(title,el('td',f.categorie||f.etape),el('td',f.description));
         const actions=el('td'); actions.className='tool-actions';
-        if(connected && tool.version) actions.append(fieldsForm(tool)); else actions.append(el('small','Édition disponible après connexion et initialisation.'));
-        actions.append(commentsUI(tool));tr.append(actions);body.append(tr);
+        if(!isCloudflarePages) actions.append(el('small','Version de consultation. Les modifications et commentaires sont disponibles sur Cloudflare Pages.'));
+        else if(connected && tool.version) actions.append(fieldsForm(tool)); else actions.append(el('small','Édition disponible après connexion et initialisation.'));
+        if(isCloudflarePages) actions.append(commentsUI(tool));tr.append(actions);body.append(tr);
       }
       if(!filtered.length){const tr=el('tr');tr.append(el('td','Aucun outil dans cette sélection.',{colspan:group==='A'?'5':'4'}));body.append(tr);}
     }
   }
   async function load() {
+    if(!isCloudflarePages) {
+      tools=initialTools;connect.hidden=false;connect.href='https://codex-prime-crl.pages.dev/outils.html#cloud-app';connect.textContent='Ouvrir la version Cloudflare Pages';reload.hidden=true;init.hidden=true;document.getElementById('test-refus').hidden=true;
+      status.textContent='Cette copie GitHub Pages est en lecture seule. L’édition R2 est disponible sur Cloudflare Pages.';render();return;
+    }
     reload.disabled=true;
     try {
       const session=await api('/session');connected=session.autorise===true;
       const data=await api('/outils');
       if(data.outils.length) { tools=data.outils;status.textContent=`${tools.length} fiches chargées depuis R2. Connexion autorisée.`; }
-      else { tools=JSON.parse(document.getElementById('initial-tools').textContent);status.textContent='R2 est vide. Initialise la liste une seule fois ; les fiches existantes ne seront jamais remplacées.'; }
-      init.hidden=!connected;
-    } catch(error) { connected=false;init.hidden=true;status.textContent=`${error.message} La liste affichée est la liste d’origine ; aucune sauvegarde cloud n’est simulée.`; }
+      else { tools=initialTools;status.textContent='R2 est vide. Initialise la liste une seule fois ; les fiches existantes ne seront jamais remplacées.'; }
+      connect.hidden=connected;
+      init.hidden=!connected || data.outils.length>0;
+      document.getElementById('test-refus').hidden=!connected || data.outils.length===0;
+    } catch(error) { connected=false;connect.hidden=false;init.hidden=true;document.getElementById('test-refus').hidden=true;status.textContent=`${error.message} La liste affichée est la liste d’origine ; aucune sauvegarde cloud n’est simulée.`; }
     finally {render();reload.disabled=false;}
   }
   // Initialization is explicit and idempotent, never triggered by a page reload.
