@@ -1,9 +1,11 @@
-(() => {
+(async () => {
   'use strict';
   const cfg = window.OUTILS_CONFIG;
-  let tools = JSON.parse(document.getElementById('initial-tools').textContent);
+  const initialTools = (await import('./worker/src/initial-tools.js')).default;
+  let tools = initialTools;
   let connected = false;
   const status = document.getElementById('cloud-status');
+  const connect = document.getElementById('connect-link');
   const reload = document.getElementById('reload-tools');
   const init = document.getElementById('init-tools');
   const search = document.getElementById('tool-search');
@@ -116,9 +118,11 @@
       const session=await api('/session');connected=session.autorise===true;
       const data=await api('/outils');
       if(data.outils.length) { tools=data.outils;status.textContent=`${tools.length} fiches chargées depuis R2. Connexion autorisée.`; }
-      else { tools=JSON.parse(document.getElementById('initial-tools').textContent);status.textContent='R2 est vide. Initialise la liste une seule fois ; les fiches existantes ne seront jamais remplacées.'; }
-      init.hidden=!connected;
-    } catch(error) { connected=false;init.hidden=true;status.textContent=`${error.message} La liste affichée est la liste d’origine ; aucune sauvegarde cloud n’est simulée.`; }
+      else { tools=initialTools;status.textContent='R2 est vide. Initialise la liste une seule fois ; les fiches existantes ne seront jamais remplacées.'; }
+      connect.hidden=connected;
+      init.hidden=!connected || data.outils.length>0;
+      document.getElementById('test-refus').hidden=!connected || data.outils.length===0;
+    } catch(error) { connected=false;connect.hidden=false;init.hidden=true;document.getElementById('test-refus').hidden=true;status.textContent=`${error.message} La liste affichée est la liste d’origine ; aucune sauvegarde cloud n’est simulée.`; }
     finally {render();reload.disabled=false;}
   }
   // Initialization is explicit and idempotent, never triggered by a page reload.
