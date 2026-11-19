@@ -1,6 +1,7 @@
 (async () => {
   'use strict';
   const cfg = window.OUTILS_CONFIG;
+  const isCloudflarePages = location.hostname === 'codex-prime-crl.pages.dev';
   const initialTools = (await import('./worker/src/initial-tools.js')).default;
   let tools = initialTools;
   let connected = false;
@@ -106,13 +107,18 @@
         if(group==='A')tr.append(el('td',f.numero));
         const title=el('th',undefined,{scope:'row'});title.append(el('a',f.nom,{href:f.url}));tr.append(title,el('td',f.categorie||f.etape),el('td',f.description));
         const actions=el('td'); actions.className='tool-actions';
-        if(connected && tool.version) actions.append(fieldsForm(tool)); else actions.append(el('small','Édition disponible après connexion et initialisation.'));
-        actions.append(commentsUI(tool));tr.append(actions);body.append(tr);
+        if(!isCloudflarePages) actions.append(el('small','Version de consultation. Les modifications et commentaires sont disponibles sur Cloudflare Pages.'));
+        else if(connected && tool.version) actions.append(fieldsForm(tool)); else actions.append(el('small','Édition disponible après connexion et initialisation.'));
+        if(isCloudflarePages) actions.append(commentsUI(tool));tr.append(actions);body.append(tr);
       }
       if(!filtered.length){const tr=el('tr');tr.append(el('td','Aucun outil dans cette sélection.',{colspan:group==='A'?'5':'4'}));body.append(tr);}
     }
   }
   async function load() {
+    if(!isCloudflarePages) {
+      tools=initialTools;connect.hidden=false;connect.href='https://codex-prime-crl.pages.dev/outils.html#cloud-app';connect.textContent='Ouvrir la version Cloudflare Pages';reload.hidden=true;init.hidden=true;document.getElementById('test-refus').hidden=true;
+      status.textContent='Cette copie GitHub Pages est en lecture seule. L’édition R2 est disponible sur Cloudflare Pages.';render();return;
+    }
     reload.disabled=true;
     try {
       const session=await api('/session');connected=session.autorise===true;
