@@ -4,6 +4,10 @@ on:
   pull_request:
     paths:
       - 'worker/**'
+      - 'functions/**'
+      - 'outils.html'
+      - 'outils-app.js'
+      - 'outils-config.js'
       - '.github/workflows/deploy-worker.yml'
 permissions:
   contents: read
